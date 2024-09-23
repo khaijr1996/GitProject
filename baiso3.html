@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính số ngày trong tháng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input {
+            padding: 10px;
+            width: 80%;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Tính số ngày trong tháng</h2>
+    <input id="monthYearInput" type="text" placeholder="Nhập tháng và năm (MM/yyyy)" />
+    <button onclick="tinhSoNgay()">Tính toán</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function laNamNhuan(nam) {
+       
+        if ((nam % 4 === 0 && nam % 100 !== 0) || (nam % 400 === 0)) {
+            return true;
+        }
+        return false;
+    }
+
+    function tinhSoNgayTrongThang(thang, nam) {
+       
+        switch(thang) {
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                return 31;
+            case 4: case 6: case 9: case 11:
+                return 30;
+            case 2:
+                return laNamNhuan(nam) ? 29 : 28;
+            default:
+                return 0;  
+        }
+    }
+
+    function tinhSoNgay() {
+        let input = document.getElementById("monthYearInput").value;
+        let resultDiv = document.getElementById("result");
+
+        let regex = /^(0[1-9]|1[0-2])\/\d{4}$/;
+        if (!regex.test(input)) {
+            resultDiv.innerHTML = "<div class='error'>Định dạng không hợp lệ! Vui lòng nhập theo định dạng MM/yyyy</div>";
+            return;
+        }
+
+       
+        let [thang, nam] = input.split("/").map(Number);
+
+        // Tính số ngày trong tháng
+        let soNgay = tinhSoNgayTrongThang(thang, nam);
+
+        // Kiểm tra nếu tháng không hợp lệ
+        if (soNgay === 0) {
+            resultDiv.innerHTML = "<span class='error'>Tháng không hợp lệ!</span>";
+        } else {
+            resultDiv.innerText = `Tháng ${thang}/${nam} có ${soNgay} ngày`;
+        }
+    }
+</script>
+
+</body>
+</html>
+
